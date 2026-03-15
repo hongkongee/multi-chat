@@ -4,6 +4,7 @@ import com.example.auth_module.entity.User;
 import com.example.auth_module.repository.UserRepository;
 import com.example.auth_module.service.auth.dto.SignupRequest;
 import com.example.auth_module.service.kafka.KafkaProducerService;
+import com.example.auth_module.util.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,6 +17,7 @@ public class AuthService {
     private final KafkaProducerService kafkaProducerService;
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final JwtTokenProvider tokenProvider;
 
     public String login(String username, String password) {
         // 1. 원래는 여기서 DB 조회를 하고 비번을 체크해야 함
@@ -31,7 +33,7 @@ public class AuthService {
             // 로그인 로직이 알림 발송 때문에 지연되지 않도록 함
             kafkaProducerService.sendMessage("login-events", username);
 
-            return "로그인 성공!";
+            return tokenProvider.createToken(user.getUsername());
         } else {
             throw new RuntimeException("아이디 또는 비밀번호가 틀렸습니다.");
         }
