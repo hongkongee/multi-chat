@@ -14,8 +14,9 @@ public class KafkaController {
     private final KafkaProducerService producerService;
 
     @GetMapping("/send")
-    public String send(@RequestParam("message") String message) {
-        producerService.sendMessage(message);
+    public String send(@RequestParam("topic") String topic,
+            @RequestParam("message") String message) {
+        producerService.sendMessage(topic, message);
         return "카프카로 보낸 메시지: " + message;
     }
 }

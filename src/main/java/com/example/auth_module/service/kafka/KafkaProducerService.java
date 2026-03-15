@@ -12,9 +12,9 @@ public class KafkaProducerService {
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final String TOPIC = "my-topic";
 
-    public void sendMessage(String message) {
+    public void sendMessage(String topic, String message) {
         log.info("보내는 메시지: {}", message);
-        kafkaTemplate.send(TOPIC, message);
+        kafkaTemplate.send(topic, message);
     }
 
 }
