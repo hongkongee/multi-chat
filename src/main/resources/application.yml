@@ -5,6 +5,14 @@ server:
 spring:
   application:
     name: auth-module
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: ferret
+    password: meta1234
   kafka:
     bootstrap-servers: localhost:9092
     consumer:

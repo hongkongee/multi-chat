@@ -2,7 +2,11 @@ package com.example.auth_module.entity;
 
 import com.example.auth_module.constant.RoleName;
 import jakarta.persistence.*;
+import lombok.Data;
 
+@Entity
+@Data
+@Table(name = "role")
 public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

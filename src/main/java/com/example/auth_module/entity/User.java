@@ -1,23 +1,27 @@
 package com.example.auth_module.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.util.HashSet;
 import java.util.Set;
 
+@Entity
+@Table(name = "users")
+@Data
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(unique = true, nullable = false)
-    private String username; // 로그인 ID
+    private String username;
 
     @Column(nullable = false)
-    private String password; // 암호화된 비밀번호
+    private String password;
 
-    private String fullName; // 이름
-    private String department; // 부서
+    private String fullName;
+    private String department;
 
     // 다대다 관계 설정 (중간 테이블 user_roles 자동 생성)
     @ManyToMany(fetch = FetchType.EAGER)
