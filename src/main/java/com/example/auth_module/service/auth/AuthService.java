@@ -7,6 +7,7 @@ import com.example.auth_module.service.kafka.KafkaProducerService;
 import com.example.auth_module.util.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Slf4j
 public class AuthService {
-    private final KafkaProducerService kafkaProducerService;
+    private final ObjectProvider<KafkaProducerService> kafkaProducerServiceProvider;
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
     private final JwtTokenProvider tokenProvider;
@@ -29,9 +30,10 @@ public class AuthService {
         // 2. 로그인 성공했다고 가정 (간단하게 구현)
         if (passwordEncoder.matches(password, user.getPassword())) {
 
-            // 3. 카프카로 로그인 성공 이벤트 발행 (비동기 처리)
-            // 로그인 로직이 알림 발송 때문에 지연되지 않도록 함
-            kafkaProducerService.sendMessage("login-events", username);
+            KafkaProducerService kafkaProducerService = kafkaProducerServiceProvider.getIfAvailable();
+            if (kafkaProducerService != null) {
+                kafkaProducerService.sendMessage("login-events", username);
+            }
 
             return tokenProvider.createToken(user.getUsername());
         } else {
