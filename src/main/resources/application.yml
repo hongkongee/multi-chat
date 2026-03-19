@@ -23,3 +23,5 @@ spring:
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
+hf:
+  token: "your_huggingface_access_token_here"

@@ -31,7 +31,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable()) // API 방식이므로 CSRF 비활성화
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/multichat/v1/auth/**", "/subscribe/**").permitAll() // 로그인과 SSE 구독은 허용
+                        .requestMatchers("/api/multichat/v1/auth/**", "/subscribe/**", "/api/model/v1/datasets").permitAll() // 로그인과 SSE 구독은 허용
                         .anyRequest().authenticated() // 나머지는 인증 필요
                 )
                 .addFilterBefore(
